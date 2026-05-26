@@ -308,6 +308,32 @@ export default function Nelly() {
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage())}
                 placeholder="Message Nelly..."
+                style={{ flex: 1, maxHeight: 120, borderRadius: 20, padding: "14px 18px"borderRadius: 18, background: msg.role === "user" ? accentColor : "rgba(255,255,255,0.1)" }}>
+                  {msg.content}
+                </div>
+                {msg.role === "assistant" && (
+                  <div style={{ marginTop: 6, display: "flex", gap: 12 }}>
+                    <button onClick={() => speak(msg.content)}>🔊 Speak</button>
+                    <button onClick={() => copyMessage(msg.content)}>Copy</button>
+                    <button onClick={regenerate}>Regenerate</button>
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {loading && <div>Nelly is typing<span style={{ animation: "dots 1.4s infinite" }}>...</span></div>}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div style={{ padding: 16, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={startVoiceInput} style={{ width: 52, height: 52, borderRadius: "50%" }}>🎤</button>
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage())}
+                placeholder="Message Nelly..."
                 style={{ flex: 1, maxHeight: 120, borderRadius: 20, padding: "14px 18px" }}
               />
               <button onClick={() => sendMessage()} disabled={!input.trim() || loading}
@@ -321,3 +347,4 @@ export default function Nelly() {
     </div>
   );
 }
+              

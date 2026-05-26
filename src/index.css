@@ -1,3 +1,19 @@
+/* ====================== GLOBAL STYLES ====================== */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #0a0a0a;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #fff;
+}
+
+/* Remove default margins */
+* {
+  box-sizing: border-box;
+}
+
+/* ====================== ANIMATIONS ====================== */
 @keyframes nellyFloat {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-12px); }
@@ -14,17 +30,25 @@
   to { transform: rotate(360deg); }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ====================== UTILITY CLASSES ====================== */
 .mode-card {
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
 
 .mode-card:hover {
   transform: translateY(-6px) scale(1.04);
-}
-
-textarea {
-  resize: none;
-  outline: none;
 }
 
 /* Scrollbar */
@@ -32,7 +56,39 @@ textarea {
   width: 5px;
 }
 
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 ::-webkit-scrollbar-thumb {
-  background: rgba(244, 114, 182, 0.3);
+  background: rgba(244, 114, 182, 0.4);
   border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(244, 114, 182, 0.6);
+}
+
+/* Textarea */
+textarea {
+  resize: none;
+  outline: none;
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Make sure the app takes full height */
+#root {
+  width: 100vw;
+  height: 100vh;
 }

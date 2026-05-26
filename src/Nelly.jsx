@@ -150,27 +150,29 @@ export default function Nelly() {
   const sendMessage = async () => {
     const text = input.trim();
     if (!text || loading) return;
-
     const newMessages = [...messages, { role: "user", content: text }];
     setMessages(newMessages);
     setInput("");
     setLoading(true);
     setNellyMood("thinking");
-
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`
+        },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "llama3-8b-8192",
           max_tokens: 1000,
-          system: getModePrompt(selectedMode),
-          messages: newMessages.map(m => ({ role: m.role, content: m.content })),
+          messages: [
+            { role: "system", content: getModePrompt(selectedMode) },
+            ...newMessages.map(m => ({ role: m.role, content: m.content }))
+          ],
         }),
       });
-
       const data = await response.json();
-      const reply = data.content?.[0]?.text || "Hmm, something went wrong. Try again!";
+      const reply = data.choices?.[0]?.message?.content || "Hmm something went wrong, try again!";
       setMessages([...newMessages, { role: "assistant", content: reply }]);
       setNellyMood("excited");
       setTimeout(() => setNellyMood("happy"), 2000);
@@ -178,11 +180,9 @@ export default function Nelly() {
       setMessages([...newMessages, { role: "assistant", content: "Oops! Something went wrong. Check your connection and try again 💔" }]);
       setNellyMood("happy");
     }
-
     setLoading(false);
     setTimeout(() => inputRef.current?.focus(), 100);
   };
-
   const openMode = (modeId) => {
     setSelectedMode(modeId);
     setMessages([]);
